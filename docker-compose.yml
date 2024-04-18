@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  apache:
+    build:
+      context: ./apache
+      dockerfile: Dockerfile
+    depends_on:
+      - php
+      - mysql
+    ports:
+      - 6666:6666
+    volumes:
+      - ./www/:/var/www/html/
+    networks:
+      - backend
+      - frontend
+
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+    volumes:
+      - ./www/:/var/www/html/
+    networks:
+      - backend
+
+
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 8889:3306
+    networks:
+      - backend
+
+networks:
+
+  backend:
+
+  frontend:
